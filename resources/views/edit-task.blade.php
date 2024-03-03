@@ -3,9 +3,9 @@
 @section('content')
     <div class="container">
         <h2>Edit Task</h2>
-        <form action="{{ route('tasks.update', $task->id) }}" method="POST">
+        <form action="{{ url('edit-task/'.$task->id)}}" method="POST">
             @csrf
-            @method('PUT')
+            @method('POST')
             <div class="form-group">
                 <label for="title">Title</label>
                 <input type="text" class="form-control" id="title" name="title" value="{{ $task->title }}">

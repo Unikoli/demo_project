@@ -4,14 +4,23 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Services\TaskService;
+use App\Models\Task;
+
 class TaskController extends Controller
 {
     protected $taskService;
-
     public function __construct(TaskService $taskService)
     {
+        
         $this->taskService = $taskService;
     }
+
+    // public function __construct()
+    // {
+    //     $taskService=new TaskService;
+    //     $this->taskService = $taskService;
+    // }
 
     public function index()
     {
@@ -21,27 +30,39 @@ class TaskController extends Controller
 
     public function create()
     {
-        return view('tasks.create');
+        return view('add-task');
     }
 
-    public function store(Request $request)
+    public function store(request $request)
     {
-        $request->validate([
+       $request->validate([
             'title' => 'required',
             'description' => 'nullable',
-            'status' => 'required|in:pending,completed',
-            'due_date' => 'nullable|date',
+            'status' => 'required|in:pending,completed'
+            
         ]);
+        $tasks = [
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+            'status' => $request->input('status')
+        ];
+        $this->taskService->createTask($tasks);
+        return redirect('all-task');
 
-        $this->taskService->createTask($request->all());
 
-        return redirect()->route('tasks.index')
-            ->with('success', 'Task created successfully.');
+        // $this->taskService->title=request('title');
+        // $this->taskService->description=request('description');
+        // $this->taskService->status=request('status');
+        // $this->taskService->createTask($request->all());
+
+        // return redirect('index');
+            
     }
 
     public function edit(Task $task)
     {
-        return view('tasks.edit', compact('task'));
+        
+        return view('edit-task',compact('task'));
     }
 
     public function update(Request $request, Task $task)
@@ -53,18 +74,22 @@ class TaskController extends Controller
             'due_date' => 'nullable|date',
         ]);
 
-        $this->taskService->updateTask($task, $request->all());
+        $tasks= [
+            'title' =>$request->input('title'),
+            'description' =>$request->input('description'),
+            'status' =>$request->input('status'),
 
-        return redirect()->route('tasks.index')
-            ->with('success', 'Task updated successfully');
+        ];
+        $this->taskService->updateTask($task,$tasks);
+        
+
+        return redirect('edit-task');
     }
 
-    public function destroy(Task $task)
+    public function destroy(Task $id)
     {
-        $this->taskService->deleteTask($task);
+        $this->taskService->deleteTask($id);
 
-        return redirect()->route('tasks.index')
-            ->with('success', 'Task deleted successfully');
-    
+        return redirect('all-task');
     }
 }

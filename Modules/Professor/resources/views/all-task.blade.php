@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('professor::layouts.app')
 
 @section('content')
     <div class="container">

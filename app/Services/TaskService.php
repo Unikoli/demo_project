@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Task;
 
+
 class TaskService
 {
     protected $taskModel;
@@ -33,6 +34,5 @@ class TaskService
     {
         $task->delete();
     }
-
-  
 }
+

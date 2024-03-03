@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <h2>Create Task</h2>
-        <form action="{{ url('') }}" method="POST">
+        <form action="{{ url('add-task')}}" method="POST">
             @csrf
             <div class="form-group">
                 <label for="title">Title</label>
